@@ -149,6 +149,7 @@ class Family:
         if timedelta.days < 0:
             return True
         else:
+            self.get_lineNum()['MARR'] if "MARR" in self.get_lineNum() else "N/A"
             raise Error('ERROR', 'FAMILY', 'US04', self.get_lineNum()["MARR"],
                         f"Family marriage date {marriage} is after divorce date {divorce}")
 
@@ -170,6 +171,7 @@ class Family:
         if (husbandMarryAge > 14 and wifeMarryAge > 14):
             return True
         else:
+            self.get_lineNum()['MARR'] if "MARR" in self.get_lineNum() else "N/A"
             raise Error('ERROR', 'FAMILY', 'US10', self.get_lineNum()["MARR"],
                         f"Family marriage date {self.get_marriedDate()} is not 14 years after"
                         f"Husband birthday {self._husband.get_birthDate()} or Wife birthday {self._wife.get_birthDate()}")
@@ -198,6 +200,7 @@ class Family:
         if timedelta.days <= 0:
             return True
         else:
+            self.get_lineNum()['MARR'] if "MARR" in self.get_lineNum() else "N/A"
             raise Error('ERROR', 'FAMILY', 'US05', self.get_lineNum()["MARR"],
                         f"Family marriage date {marriage} is after death date of husband {self._husband.get_deathDate()} or wife {self._wife.get_deathDate()}")
 
@@ -222,6 +225,7 @@ class Family:
         if deathdays < 0:
             return True
         else:
+            self.get_lineNum()['DIV'] if "DIV" in self.get_lineNum() else "N/A"
             raise Error('ERROR', 'FAMILY', 'US05', self.get_lineNum()["DIV"],
                         f"Family divorce date {self.get_divorcedDate()} is after death date of husband {self._husband.get_deathDate()} or wife {self._wife.get_deathDate()}")
 
@@ -234,6 +238,7 @@ class Family:
             if not c.get_birthDate(): raise AttributeError("Missing child birthDate")
             if c.get_birthDate() <= self.get_marriedDate():
                 # return False
+                c.get_lineNum()['BIRT'] if "BIRT" in c.get_lineNum() else "N/A"
                 raise Error('ANOMALY', 'FAMILY', 'US08', c.get_lineNum()["BIRT"],
                             f"Child birthday {c.get_birthDate()} is after marriage date of Family {self.get_marriedDate()}")
         return True
@@ -249,6 +254,7 @@ class Family:
             for c in self._children:
                 if c.get_birthDate() > death:
                     # return False
+                    c.get_lineNum()['BIRT'] if "BIRT" in c.get_lineNum() else "N/A"
                     raise Error('ERROR', 'FAMILY', 'US09', c.get_lineNum()["BIRT"],
                                 f"Child birthday {c.get_birthDate()} is after death date of mother {death}")
             return True
@@ -307,7 +313,9 @@ class Family:
         """
         if len(self._children) < 15:
             return True
-        else: raise Error('ERROR', 'FAMILY', 'US15', self.get_lineNum()["FAM ID"],
+        else:
+            self.get_lineNum()['FAM ID'] if "FAM ID" in self.get_lineNum() else "N/A"
+            raise Error('ERROR', 'FAMILY', 'US15', self.get_lineNum()["FAM ID"],
                       f"The siblings of the family is more than 15.")
 
     #US21 Husband in family should be male and wife in family should be female
@@ -321,7 +329,9 @@ class Family:
             "missing gender of husband or wife")
         if self._husband.get_gender() == "M" and self._wife.get_gender() == "F":
             return True
-        else:raise Error ('ERROR', 'FAMILY', 'US21', self.get_lineNum()["FAM ID"],
+        else:
+            self.get_lineNum()['FAM ID'] if "FAM ID" in self.get_lineNum() else "N/A"
+            raise Error ('ERROR', 'FAMILY', 'US21', self.get_lineNum()["FAM ID"],
                       f"Family {self.get_id()} 's husband {self.get_husband().get_id()} 's gender {self.get_husband().get_gender()} is incorrect "
                       f"or wife {self.get_wife().get_id()} 's gender {self.get_wife().get_gender()} is incorrect.")
 
@@ -354,7 +364,9 @@ class Family:
             "Missing husband and wife parent")
         if not self._husband.get_parent_family().get_id() == self._wife.get_parent_family().get_id():
             return True
-        else:raise Error('ERROR', 'FAMILY', 'US18', self.get_lineNum()['FAM ID'], f"Siblings in family {self.get_id()} are married.")
+        else:
+            self.get_lineNum()['FAM ID'] if "FAM ID" in self.get_lineNum() else "N/A"
+            raise Error('ERROR', 'FAMILY', 'US18', self.get_lineNum()['FAM ID'], f"Siblings in family {self.get_id()} are married.")
 
     #US28 List siblings in families by decreasing age, i.e. oldest siblings first
     def order_siblings_by_age(self):

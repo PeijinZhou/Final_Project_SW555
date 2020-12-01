@@ -251,6 +251,7 @@ class Gedcom:
                     dic.add(indi)
                 else:
                     #return False
+                    indi.get_lineNum()['INDI ID'] if "INDI ID" in indi.get_lineNum() else "N/A"
                     raise Error('ANOMALY', 'GEDCOM', 'US023', indi.get_lineNum()['INDI ID'],
                                 f"Individual {indi.get_id()} appears multiple times in the GEDCOM file")
         return True
@@ -266,6 +267,7 @@ class Gedcom:
             this_fam_info = [family.get_husband().get_name(), family.get_wife.get_name(), family.get_marriedDate()]
             if this_fam_info in check_list:
                 # return False
+                family.get_lineNum()['FAM ID'] if "FAM ID" in family.get_lineNum() else "N/A"
                 raise Error('ANOMALY', 'GEDCOM', 'US024', family.get_lineNum()['FAM ID'],
                         f"Family {family.get_id()} has repeated marriage date {family.get_marriedDate()} or spouse name {family._wife.get_name()}")
             check_list.append(this_fam_info)
@@ -282,6 +284,7 @@ class Gedcom:
                 child_info = [child.get_name(), child.get_birthDate()]
                 if child_info in check_list:
                     # return False
+                    child.get_lineNum()['INDI ID'] if "INDI ID" in child.get_lineNum() else "N/A"
                     raise Error('ERROR', 'GEDCOM', 'US025', child.get_lineNum()['INDI ID'],
                             f"Child {child.get_id()} 's birthday {child.get_birthDate()} or name {child.get_name()} is repeated in a family")
                 check_list.append(child_info)

@@ -131,7 +131,9 @@ class Individual:
     #US07 Death should be less than 150 years after birth for dead people, and current date should be less than 150 years after birth for all living people
     def less_then_150_years_old(self):
         if self.get_age() < 150: return True
-        else: raise Error('ANOMALY', 'INDIVIDUAL', 'US07', self.get_lineNum()['BIRT'], f" Individual's Age {self.get_age()} is greater than 150")
+        else:
+            self.get_lineNum()['BIRT'] if "BIRT" in self.get_lineNum() else "N/A"
+            raise Error('ANOMALY', 'INDIVIDUAL', 'US07', self.get_lineNum()['BIRT'], f" Individual's Age {self.get_age()} is greater than 150")
 
     #US11 Marriage should not occur during marriage to another spouse //EXPLAIN CASE
     def no_bigamy(self):
@@ -155,26 +157,31 @@ class Individual:
             for Age_range in marrageAgeList:
                 if (Age_range[1] == devorceAge and devorceAge == None):
                     #return False
+                    self.get_lineNum()['INDI ID'] if "INDI ID" in self.get_lineNum() else "N/A"
                     raise Error('ERROR', 'INDIVIDUAL', 'US11', self.get_lineNum()['INDI ID'],
                                       f" Individual {self.get_id()} has committed bigamy")
 
                 elif ((not Age_range[1] == devorceAge) and devorceAge == None):
                     if (not (Age_range[0] < marrageAge and Age_range[1] < marrageAge)):
                         #return False
+                        self.get_lineNum()['INDI ID'] if "INDI ID" in self.get_lineNum() else "N/A"
                         raise Error('ERROR', 'INDIVIDUAL', 'US11', self.get_lineNum()['INDI ID'],
                                     f" Individual {self.get_id()} has committed bigamy")
                 elif ((not Age_range[1] == devorceAge) and Age_range[1] == None):
                     if (not (marrageAge < Age_range[0] and devorceAge < Age_range[0])):
                         #return False
+                        self.get_lineNum()['INDI ID'] if "INDI ID" in self.get_lineNum() else "N/A"
                         raise Error('ERROR', 'INDIVIDUAL', 'US11', self.get_lineNum()['INDI ID'],
                                     f" Individual {self.get_id()} has committed bigamy")
                 else:
                     if (marrageAge > Age_range[0] and marrageAge < Age_range[1]):
                         #return False
+                        self.get_lineNum()['INDI ID'] if "INDI ID" in self.get_lineNum() else "N/A"
                         raise Error('ERROR', 'INDIVIDUAL', 'US11', self.get_lineNum()['INDI ID'],
                                     f" Individual {self.get_id()} has committed bigamy")
                     elif (devorceAge > Age_range[0] and devorceAge < Age_range[1]):
                         #return False
+                        self.get_lineNum()['INDI ID'] if "INDI ID" in self.get_lineNum() else "N/A"
                         raise Error('ERROR', 'INDIVIDUAL', 'US11', self.get_lineNum()['INDI ID'],
                                     f" Individual {self.get_id()} has committed bigamy")
             marrageAgeList.append((marrageAge, devorceAge))
@@ -245,6 +252,7 @@ class Individual:
                 for first_cousin in child_fam.get_children():
                     if first_cousin == self:
                         #return False
+                        first_cousin.get_lineNum()['INDI ID'] if "INDI ID" in first_cousin.get_lineNum() else "N/A"
                         raise Error('ANOMALY', 'INDIVIDUAL', 'US19',
                                     first_cousin.get_lineNum()['INDI ID'],
                                     f"first_cousin {first_cousin.get_id()} is married to each other")
@@ -258,6 +266,7 @@ class Individual:
                 for first_cousin in mummy_sibling_fam.get_children():
                     if first_cousin == self:
                         #return False
+                        first_cousin.get_lineNum()['INDI ID'] if "INDI ID" in first_cousin.get_lineNum() else "N/A"
                         raise Error('ANOMALY', 'INDIVIDUAL', 'US19',
                                     first_cousin.get_lineNum()['INDI ID'],
                                     f"first_cousin {first_cousin.get_id()} is married to each other")
